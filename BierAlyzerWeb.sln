@@ -1,13 +1,10 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BierAlyzer.Web", "BierAlyzer.Web\BierAlyzer.Web.csproj", "{A3DA0C08-6323-435E-9ECC-249B0E7E76E9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BierAlyzer.Contracts", "BierAlyzer.Contracts\BierAlyzer.Contracts.csproj", "{E743F6C7-C96C-4BD9-B2AD-B61DAFA9369F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BierAlyzer.Api", "BierAlyzer.Api\BierAlyzer.Api.csproj", "{52DD3542-3603-4B50-9ACE-35B71B6FEE60}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BierAlyzer.Client", "BierAlyzer.Client\BierAlyzer.Client.csproj", "{F64E666C-68C7-4952-9CF8-0D1069E0554C}"
 EndProject
@@ -47,18 +44,6 @@ Global
 		{E743F6C7-C96C-4BD9-B2AD-B61DAFA9369F}.Release|x64.Build.0 = Release|Any CPU
 		{E743F6C7-C96C-4BD9-B2AD-B61DAFA9369F}.Release|x86.ActiveCfg = Release|Any CPU
 		{E743F6C7-C96C-4BD9-B2AD-B61DAFA9369F}.Release|x86.Build.0 = Release|Any CPU
-		{52DD3542-3603-4B50-9ACE-35B71B6FEE60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{52DD3542-3603-4B50-9ACE-35B71B6FEE60}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{52DD3542-3603-4B50-9ACE-35B71B6FEE60}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{52DD3542-3603-4B50-9ACE-35B71B6FEE60}.Debug|x64.Build.0 = Debug|Any CPU
-		{52DD3542-3603-4B50-9ACE-35B71B6FEE60}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{52DD3542-3603-4B50-9ACE-35B71B6FEE60}.Debug|x86.Build.0 = Debug|Any CPU
-		{52DD3542-3603-4B50-9ACE-35B71B6FEE60}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{52DD3542-3603-4B50-9ACE-35B71B6FEE60}.Release|Any CPU.Build.0 = Release|Any CPU
-		{52DD3542-3603-4B50-9ACE-35B71B6FEE60}.Release|x64.ActiveCfg = Release|Any CPU
-		{52DD3542-3603-4B50-9ACE-35B71B6FEE60}.Release|x64.Build.0 = Release|Any CPU
-		{52DD3542-3603-4B50-9ACE-35B71B6FEE60}.Release|x86.ActiveCfg = Release|Any CPU
-		{52DD3542-3603-4B50-9ACE-35B71B6FEE60}.Release|x86.Build.0 = Release|Any CPU
 		{F64E666C-68C7-4952-9CF8-0D1069E0554C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F64E666C-68C7-4952-9CF8-0D1069E0554C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F64E666C-68C7-4952-9CF8-0D1069E0554C}.Debug|x64.ActiveCfg = Debug|Any CPU
