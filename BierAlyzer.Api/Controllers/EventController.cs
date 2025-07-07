@@ -4,7 +4,7 @@ using BierAlyzer.Api.Services;
 using BierAlyzer.Contracts.Communication.Event;
 using BierAlyzer.Contracts.Dto;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace BierAlyzer.Api.Controllers
 {
@@ -33,8 +33,8 @@ namespace BierAlyzer.Api.Controllers
         /// <returns>   Result. </returns>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet]
-        [SwaggerResponse(200, typeof(EventResponse))]
-        [SwaggerResponse(400, typeof(EventResponse))]
+        [SwaggerResponse(200, Type = typeof(EventResponse))]
+        [SwaggerResponse(400, Type = typeof(EventResponse))]
         public IActionResult Get()
         {
             var dtoEvents = _eventService.GetEvents(HttpContext.User.Claims);
@@ -48,8 +48,8 @@ namespace BierAlyzer.Api.Controllers
         /// <returns>   An IActionResult. </returns>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet("{eventid}")]
-        [SwaggerResponse(200, typeof(EventResponse))]
-        [SwaggerResponse(400, typeof(EventResponse))]
+        [SwaggerResponse(200, Type = typeof(EventResponse))]
+        [SwaggerResponse(400, Type = typeof(EventResponse))]
         public IActionResult Get(Guid eventId)
         {
             var response = _eventService.GetEvent(eventId, HttpContext.User.Claims);

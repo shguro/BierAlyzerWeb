@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NUglify.Css;
-using NUglify.JavaScript;
 
 namespace BierAlyzerWeb
 {
@@ -20,63 +18,7 @@ namespace BierAlyzerWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            #region Bundle Configurations
-
-            var javascriptBundleSettings = new CodeSettings
-            {
-                PreserveImportantComments = false,
-                MinifyCode = false,
-                IgnoreAllErrors = true
-            };
-
-            var cssSettings = new CssSettings
-            {
-                MinifyExpressions = true,
-                CommentMode = CssComment.None,
-            };
-
-            #endregion
-
-            services.AddMvc();
-            services.AddWebOptimizer(pipeline =>
-            {
-                #region Bundles
-
-                // Global CSS
-                pipeline.AddCssBundle(
-                    "/css/bieralyzer.min.css",
-                    cssSettings,
-                    "/css/global/bootstrap-4.1.0.min.css",
-                    "/css/global/bootstrap-material-design.min.css",
-                    "/css/global/fontawesome-5.0.11.all.css",
-                    "/css/global/materialdesign-custom.css",
-                    "/css/global/site.css");
-
-                // Typeahead CSS
-                pipeline.AddCssBundle(
-                    "/css/typeahead.min.css",
-                    cssSettings,
-                    "/css/typeahead.css");
-
-                // Global JS
-                pipeline.AddJavaScriptBundle(
-                    "/js/bieralyzer.min.js",
-                    javascriptBundleSettings,
-                    "/js/global/jquery-3.3.1.slim.min.js",
-                    "/js/global/popper-1.14.3.min.js",
-                    "/js/global/bootstrap-4.1.0.min.js",
-                    "/js/global/bootstrap-material-design.min.js",
-                    "/js/global/site.js");
-
-                // Typeahead JS
-                pipeline.AddJavaScriptBundle(
-                    "/js/typeahead.min.js",
-                    javascriptBundleSettings,
-                    "/js/typeahead.js",
-                    "/js/typeahead-matcher.js");
-
-                #endregion
-            });
+            services.AddControllersWithViews();
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
@@ -86,13 +28,10 @@ namespace BierAlyzerWeb
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            #region Exception Configuration
-
-            if (env.IsDevelopment())
+            if (env.EnvironmentName == "Development")
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -100,19 +39,12 @@ namespace BierAlyzerWeb
                 app.UseExceptionHandler("/error");
             }
 
-            #endregion
-
             app.UseStaticFiles();
             app.UseSession();
-
-            app.UseWebOptimizer();
-
             app.UseRouting();
 
             app.UseEndpoints(routes =>
             {
-                #region Routes
-
                 // AccountController
                 routes.MapControllerRoute("Login", "login", new { controller = "Account", action = "Login" });
                 routes.MapControllerRoute("Logout", "logout", new { controller = "Account", action = "Logout" });
@@ -149,8 +81,6 @@ namespace BierAlyzerWeb
                 // Default
                 routes.MapControllerRoute("default", "{controller}/{action}", new { controller = "Home", action = "Events" });
                 routes.MapControllerRoute("fallback", "{*url}", new { controller = "Home", action = "Events" });
-
-                #endregion
             });
         }
     }

@@ -10,7 +10,7 @@ using BierAlyzer.Contracts.Interface.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace BierAlyzer.Api.Controllers
 {
@@ -44,9 +44,9 @@ namespace BierAlyzer.Api.Controllers
         /// <returns>   Result. </returns>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpPost]
-        [SwaggerResponse(200, typeof(TokenResponse), "Fine, here is your token")]
-        [SwaggerResponse(400, null, "Invalid data")]
-        [SwaggerResponse(500, null, "Token creation problem")]
+        [SwaggerResponse(200, Type = typeof(TokenResponse), Description = "Fine, here is your token")]
+        [SwaggerResponse(400, Description = "Invalid data")]
+        [SwaggerResponse(500, Description = "Token creation problem")]
         public IActionResult Token([FromBody] TokenRequest request)
         {
             if (request == null) return BadRequest("Invalid data");
@@ -90,9 +90,9 @@ namespace BierAlyzer.Api.Controllers
         /// <returns>   An IActionResult. </returns>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpPost]
-        [SwaggerResponse(200, typeof(TokenResponse), "Fine, here is your token")]
-        [SwaggerResponse(400, null, "Invalid data")]
-        [SwaggerResponse(401, null, "Refresh token expired")]
+        [SwaggerResponse(200, Type = typeof(TokenResponse), Description = "Fine, here is your token")]
+        [SwaggerResponse(400, Description = "Invalid data")]
+        [SwaggerResponse(401, Description = "Refresh token expired")]
         public IActionResult Refresh([FromBody] RefreshTokenRequest refreshToken)
         {
             try

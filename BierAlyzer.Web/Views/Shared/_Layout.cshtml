@@ -6,7 +6,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BierAlyzer Online - @ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/bieralyzer.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/bootstrap-4.1.0.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/bootstrap-material-design.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/fontawesome-5.0.11.all.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/materialdesign-custom.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global/site.css" asp-append-version="true" />
     @RenderSection("Style", required: false)
     @Html.Partial("_Favicons")
 </head>
@@ -43,7 +47,11 @@
         </footer>
     </div>
 
-    <script src="~/js/bieralyzer.min.js" asp-append-version="true"></script>
+    <script src="~/js/global/jquery-3.3.1.slim.min.js" asp-append-version="true"></script>
+    <script src="~/js/global/popper-1.14.3.min.js" asp-append-version="true"></script>
+    <script src="~/js/global/bootstrap-4.1.0.min.js" asp-append-version="true"></script>
+    <script src="~/js/global/bootstrap-material-design.min.js" asp-append-version="true"></script>
+    <script src="~/js/global/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

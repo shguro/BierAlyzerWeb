@@ -22,26 +22,16 @@ namespace BierAlyzer.Web.Models
             var configurationBuilder = new ConfigurationBuilder();
             configurationBuilder.SetBasePath(Directory.GetCurrentDirectory());
 
-            if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Development)
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (env == "Development")
                 configurationBuilder.AddJsonFile($"appsettings.Development.json", optional: true);
             else
                 configurationBuilder.AddJsonFile($"appsettings.json", optional: true);
-            
 
             var configuration = configurationBuilder.Build();
-
             var builder = new DbContextOptionsBuilder<BierAlyzerContext>();
-
             var connectionString = configuration.GetConnectionString("Database");
-
-            builder.UseMySql(connectionString);
-
-            //AB20181108 In case some magical creature makes sqlite foreigns key available
-            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Development)
-            //    builder.UseSqlite(connectionString);
-            //else
-            //    builder.UseMySql(connectionString);
-
+            builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             return new BierAlyzerContext(builder.Options);
         }
 

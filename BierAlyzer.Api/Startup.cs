@@ -12,8 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 using WebApiContrib.Core.Formatter.Protobuf;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace BierAlyzer.Api
 {
@@ -50,13 +51,17 @@ namespace BierAlyzer.Api
         {
             services
                 .AddMemoryCache()
-                .AddDbContext<BierAlyzerContext>(options => options.UseMySql(Configuration.GetConnectionString("Database")))
+                .AddDbContext<BierAlyzerContext>(options =>
+                    options.UseMySql(
+                        Configuration.GetConnectionString("Database"),
+                        ServerVersion.AutoDetect(Configuration.GetConnectionString("Database"))
+                    ))
                 .AddTransient<AuthService>()
                 .AddTransient<EventService>();
 
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(Startup));
 
-            services.AddMvc(options =>
+            services.AddControllers(options =>
                 {
                     options.RespectBrowserAcceptHeader = true;
                     var policy = new AuthorizationPolicyBuilder()
@@ -66,12 +71,10 @@ namespace BierAlyzer.Api
                 })
                 .AddXmlDataContractSerializerFormatters()
                 .AddProtobufFormatters();
-            //.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "BierAlyzer API", Version = "v1" });
-                c.IncludeXmlComments("bin/BierAlyzerApi.xml");
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BierAlyzer API", Version = "v1" });
             });
 
             // Setup authentication
@@ -84,7 +87,6 @@ namespace BierAlyzer.Api
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-
                 }).AddJwtBearer(options =>
             {
                 options.SaveToken = true;
@@ -113,9 +115,9 @@ namespace BierAlyzer.Api
         /// <param name="app">  The application. </param>
         /// <param name="env">  The environment. </param>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.EnvironmentName == "Development")
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -131,8 +133,13 @@ namespace BierAlyzer.Api
             });
 
             app.UseAuthentication();
+            app.UseRouting();
+            app.UseAuthorization();
 
-            app.UseMvc();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
