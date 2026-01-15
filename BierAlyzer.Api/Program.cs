@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Linq;
 using BierAlyzer.Api.Models;
 using BierAlyzer.Contracts.Model;
 using BierAlyzer.EntityModel;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace BierAlyzer.Api
 {
@@ -50,7 +50,7 @@ namespace BierAlyzer.Api
 
             #endregion
 
-            using (var host = CreateWebHostBuilder(args).Build())
+            using (var host = CreateHostBuilder(args).Build())
             {
                 var config = host.Services.GetService<IConfiguration>();
 
@@ -71,9 +71,12 @@ namespace BierAlyzer.Api
         /// <param name="args"> The arguments. </param>
         /// <returns>   The new web host builder. </returns>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://*:5001")
-                .UseStartup<Startup>();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseUrls("http://*:5001");
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

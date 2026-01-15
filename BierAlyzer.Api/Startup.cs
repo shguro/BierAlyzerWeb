@@ -11,8 +11,9 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 using WebApiContrib.Core.Formatter.Protobuf;
 
 namespace BierAlyzer.Api
@@ -50,13 +51,13 @@ namespace BierAlyzer.Api
         {
             services
                 .AddMemoryCache()
-                .AddDbContext<BierAlyzerContext>(options => options.UseMySql(Configuration.GetConnectionString("Database")))
+                .AddDbContext<BierAlyzerContext>(options => options.UseMySql(Configuration.GetConnectionString("Database"), ServerVersion.AutoDetect(Configuration.GetConnectionString("Database"))))
                 .AddTransient<AuthService>()
                 .AddTransient<EventService>();
 
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(Startup));
 
-            services.AddMvc(options =>
+            services.AddControllers(options =>
                 {
                     options.RespectBrowserAcceptHeader = true;
                     var policy = new AuthorizationPolicyBuilder()
@@ -70,8 +71,8 @@ namespace BierAlyzer.Api
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "BierAlyzer API", Version = "v1" });
-                c.IncludeXmlComments("bin/BierAlyzerApi.xml");
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BierAlyzer API", Version = "v1" });
+                c.IncludeXmlComments(System.IO.Path.Combine(System.AppContext.BaseDirectory, "BierAlyzerApi.xml"));
             });
 
             // Setup authentication
@@ -113,7 +114,7 @@ namespace BierAlyzer.Api
         /// <param name="app">  The application. </param>
         /// <param name="env">  The environment. </param>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -130,9 +131,15 @@ namespace BierAlyzer.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-            app.UseAuthentication();
+            app.UseRouting();
 
-            app.UseMvc();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

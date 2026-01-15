@@ -35,7 +35,7 @@ namespace BierAlyzer.Api.Models
 
             var connectionString = configuration.GetConnectionString("Database");
 
-            builder.UseMySql(connectionString);
+            builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
             //AB20181108 In case some magical creature makes sqlite foreigns key available
             //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Development)
