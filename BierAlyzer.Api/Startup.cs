@@ -52,7 +52,9 @@ namespace BierAlyzer.Api
                 .AddMemoryCache()
                 .AddDbContext<BierAlyzerContext>(options => options.UseMySql(Configuration.GetConnectionString("Database")))
                 .AddTransient<AuthService>()
-                .AddTransient<EventService>();
+                .AddTransient<EventService>()
+                .AddTransient<UserService>()
+                .AddTransient<ManagementService>();
 
             services.AddAutoMapper();
 
