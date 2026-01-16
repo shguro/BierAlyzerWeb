@@ -10,17 +10,28 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace BierAlyzer.Api.Controllers
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Administration and management. </summary>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     [Route("api/management")]
     [Authorize]
     public class ManagementController : Controller
     {
         private readonly ManagementService _managementService;
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Constructor. </summary>
+        /// <param name="managementService">    The management service. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public ManagementController(ManagementService managementService)
         {
             _managementService = managementService;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Get all users (Admin only). </summary>
+        /// <returns>   All users. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet("users")]
         [SwaggerResponse(200, typeof(UsersResponse))]
         [SwaggerResponse(400, typeof(UsersResponse))]
@@ -31,6 +42,11 @@ namespace BierAlyzer.Api.Controllers
             return BadRequest(response);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Get a specific user by ID (Admin only). </summary>
+        /// <param name="id">   The user identifier. </param>
+        /// <returns>   The user. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet("user/{id}")]
         [SwaggerResponse(200, typeof(UsersResponse))]
         [SwaggerResponse(400, typeof(UsersResponse))]
@@ -41,6 +57,11 @@ namespace BierAlyzer.Api.Controllers
             return BadRequest(response);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Update a user (Admin only). </summary>
+        /// <param name="request">  The update request. </param>
+        /// <returns>   The updated user. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpPost("user")]
         [SwaggerResponse(200, typeof(UsersResponse))]
         [SwaggerResponse(400, typeof(UsersResponse))]
@@ -51,6 +72,10 @@ namespace BierAlyzer.Api.Controllers
             return BadRequest(response);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Get all events (Admin only). </summary>
+        /// <returns>   All events. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet("events")]
         [SwaggerResponse(200, typeof(EventResponse))]
         [SwaggerResponse(400, typeof(EventResponse))]
@@ -61,6 +86,11 @@ namespace BierAlyzer.Api.Controllers
             return BadRequest(response);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Delete an event (Admin only). </summary>
+        /// <param name="id">   The event identifier. </param>
+        /// <returns>   Result. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpDelete("event/{id}")]
         [SwaggerResponse(200, typeof(EventResponse))]
         [SwaggerResponse(400, typeof(EventResponse))]
@@ -71,6 +101,10 @@ namespace BierAlyzer.Api.Controllers
             return BadRequest(response);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Get all drinks (Admin only). </summary>
+        /// <returns>   All drinks. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet("drinks")]
         [SwaggerResponse(200, typeof(DrinkResponse))]
         [SwaggerResponse(400, typeof(DrinkResponse))]
@@ -81,6 +115,11 @@ namespace BierAlyzer.Api.Controllers
             return BadRequest(response);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Create a new drink (Admin only). </summary>
+        /// <param name="request">  The create request. </param>
+        /// <returns>   The created drink. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpPost("drink")]
         [SwaggerResponse(200, typeof(DrinkResponse))]
         [SwaggerResponse(400, typeof(DrinkResponse))]
@@ -91,6 +130,11 @@ namespace BierAlyzer.Api.Controllers
             return BadRequest(response);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Update a drink (Admin only). </summary>
+        /// <param name="request">  The update request. </param>
+        /// <returns>   The updated drink. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpPut("drink")]
         [SwaggerResponse(200, typeof(DrinkResponse))]
         [SwaggerResponse(400, typeof(DrinkResponse))]
@@ -101,6 +145,11 @@ namespace BierAlyzer.Api.Controllers
             return BadRequest(response);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Delete a drink (Admin only). </summary>
+        /// <param name="id">   The drink identifier. </param>
+        /// <returns>   Result. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpDelete("drink/{id}")]
         [SwaggerResponse(200, typeof(DrinkResponse))]
         [SwaggerResponse(400, typeof(DrinkResponse))]

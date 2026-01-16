@@ -8,17 +8,28 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace BierAlyzer.Api.Controllers
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Manage user profile. </summary>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     [Route("api/user")]
     [Authorize]
     public class UserController : Controller
     {
         private readonly UserService _userService;
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Constructor. </summary>
+        /// <param name="userService">  The user service. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public UserController(UserService userService)
         {
             _userService = userService;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Get the current user's profile. </summary>
+        /// <returns>   The user profile. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet("profile")]
         [SwaggerResponse(200, typeof(UserProfileResponse), "User profile")]
         [SwaggerResponse(400, typeof(UserProfileResponse), "Error")]
@@ -29,6 +40,11 @@ namespace BierAlyzer.Api.Controllers
             return BadRequest(response);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Update the current user's profile. </summary>
+        /// <param name="request">  The update request. </param>
+        /// <returns>   The updated user profile. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpPost("profile")]
         [SwaggerResponse(200, typeof(UserProfileResponse), "User profile updated")]
         [SwaggerResponse(400, typeof(UserProfileResponse), "Error")]
