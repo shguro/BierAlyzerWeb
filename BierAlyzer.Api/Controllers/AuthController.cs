@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using AutoMapper;
 using BierAlyzer.Api.Helper;
 using BierAlyzer.Api.Services;
 using BierAlyzer.Contracts.Communication.Auth;
+using BierAlyzer.Contracts.Model;
 using BierAlyzer.Contracts.Communication.Auth.Request;
 using BierAlyzer.Contracts.Communication.Auth.Response;
 using BierAlyzer.Contracts.Interface.Service;
@@ -81,6 +83,59 @@ namespace BierAlyzer.Api.Controllers
             }
 
             return BadRequest();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Registers a new user </summary>
+        /// <remarks>   Andre Beging, 18.06.2018. </remarks>
+        /// <param name="request">  RegisterRequest. </param>
+        /// <returns>   Result. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [HttpPost]
+        [SwaggerResponse(200, typeof(TokenResponse), "Registration successful, here is your token")]
+        [SwaggerResponse(400, null, "Invalid data or email already in use")]
+        [SwaggerResponse(500, null, "Registration problem")]
+        public IActionResult Register([FromBody] RegisterRequest request)
+        {
+            if (request == null) return BadRequest("Invalid data");
+
+            if (_authService.Register(request, out var user))
+            {
+                // Generate tokens directly after registration
+                var userClaims = new[]
+                {
+                    new Claim(BierAlyzerClaim.UserId, user.UserId.ToString()),
+                    new Claim(BierAlyzerClaim.Language, "de-DE"),
+                    new Claim(BierAlyzerClaim.UserType, user.Type.ToString())
+                };
+
+                // Create tokens
+                var token = AuthenticationHelper.GenerateAccessToken(_configuration, userClaims);
+                var refreshToken = AuthenticationHelper.GenerateRefreshToken(_configuration, userClaims);
+
+                if (token == null) return StatusCode(500);
+                if (refreshToken == null) return StatusCode(500);
+
+                // Store refresh token
+                var successfullyStored = _authService.StoreRefreshToken(refreshToken);
+                if (!successfullyStored) return StatusCode(500);
+
+                return Ok(new TokenResponse
+                {
+                    AccessToken = new TokenResource
+                    {
+                        Token = new JwtSecurityTokenHandler().WriteToken(token),
+                        Expires = token.ValidTo
+                    },
+                    RefreshToken = new TokenResource
+                    {
+                        Token = new JwtSecurityTokenHandler().WriteToken(refreshToken),
+                        Expires = refreshToken.ValidTo
+                    }
+                });
+            }
+
+            return BadRequest("Registration failed");
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

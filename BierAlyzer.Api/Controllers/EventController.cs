@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BierAlyzer.Api.Services;
 using BierAlyzer.Contracts.Communication.Event;
+using BierAlyzer.Contracts.Communication.Event.Request;
 using BierAlyzer.Contracts.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -54,6 +55,86 @@ namespace BierAlyzer.Api.Controllers
         {
             var response = _eventService.GetEvent(eventId, HttpContext.User.Claims);
 
+            if (response.Result.Success) return Ok(response);
+            return BadRequest(response);
+        }
+
+        [HttpPost("join")]
+        [SwaggerResponse(200, typeof(EventResponse))]
+        [SwaggerResponse(400, typeof(EventResponse))]
+        public IActionResult Join([FromBody] JoinEventRequest request)
+        {
+            var response = _eventService.JoinEvent(request, HttpContext.User.Claims);
+            if (response.Result.Success) return Ok(response);
+            return BadRequest(response);
+        }
+
+        [HttpPost("join/{id}")]
+        [SwaggerResponse(200, typeof(EventResponse))]
+        [SwaggerResponse(400, typeof(EventResponse))]
+        public IActionResult JoinPublic(Guid id)
+        {
+            var response = _eventService.JoinPublicEvent(id, HttpContext.User.Claims);
+            if (response.Result.Success) return Ok(response);
+            return BadRequest(response);
+        }
+
+        [HttpPost("leave/{id}")]
+        [SwaggerResponse(200, typeof(EventResponse))]
+        [SwaggerResponse(400, typeof(EventResponse))]
+        public IActionResult Leave(Guid id)
+        {
+            var response = _eventService.LeaveEvent(id, HttpContext.User.Claims);
+            if (response.Result.Success) return Ok(response);
+            return BadRequest(response);
+        }
+
+        [HttpPost]
+        [SwaggerResponse(200, typeof(EventResponse))]
+        [SwaggerResponse(400, typeof(EventResponse))]
+        public IActionResult Create([FromBody] CreateEventRequest request)
+        {
+            var response = _eventService.CreateEvent(request, HttpContext.User.Claims);
+            if (response.Result.Success) return Ok(response);
+            return BadRequest(response);
+        }
+
+        [HttpPut]
+        [SwaggerResponse(200, typeof(EventResponse))]
+        [SwaggerResponse(400, typeof(EventResponse))]
+        public IActionResult Update([FromBody] UpdateEventRequest request)
+        {
+            var response = _eventService.UpdateEvent(request, HttpContext.User.Claims);
+            if (response.Result.Success) return Ok(response);
+            return BadRequest(response);
+        }
+
+        [HttpDelete("{id}")]
+        [SwaggerResponse(200, typeof(EventResponse))]
+        [SwaggerResponse(400, typeof(EventResponse))]
+        public IActionResult Remove(Guid id)
+        {
+            var response = _eventService.RemoveEvent(id, HttpContext.User.Claims);
+            if (response.Result.Success) return Ok(response);
+            return BadRequest(response);
+        }
+
+        [HttpPost("status")]
+        [SwaggerResponse(200, typeof(EventResponse))]
+        [SwaggerResponse(400, typeof(EventResponse))]
+        public IActionResult SetStatus([FromBody] SetEventStatusRequest request)
+        {
+            var response = _eventService.SetStatus(request, HttpContext.User.Claims);
+            if (response.Result.Success) return Ok(response);
+            return BadRequest(response);
+        }
+
+        [HttpPost("book")]
+        [SwaggerResponse(200, typeof(EventResponse))]
+        [SwaggerResponse(400, typeof(EventResponse))]
+        public IActionResult BookDrink([FromBody] BookDrinkRequest request)
+        {
+            var response = _eventService.BookDrink(request, HttpContext.User.Claims);
             if (response.Result.Success) return Ok(response);
             return BadRequest(response);
         }
