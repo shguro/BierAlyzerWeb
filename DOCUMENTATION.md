@@ -197,3 +197,36 @@ Any frontend (Web, Mobile) consuming this API should:
 1.  **Store Tokens:** Securely store `AccessToken` and `RefreshToken`.
 2.  **Handle 401s:** Automatically attempt to use the `RefreshToken` when an API call returns `401 Unauthorized`.
 3.  **Event Polling:** For live event views, poll the `GET /events/{id}` endpoint periodically to update leaderboards in near real-time.
+
+
+## 5. Legacy Authentication & Data Migration
+
+To ensure existing users can log in to a re-implemented system, the authentication mechanism must replicate the legacy hashing algorithm used to generate the `Hash` and `Salt` stored in the database.
+
+### 5.1. Algorithm Details
+
+The system uses **MD5** for hashing. While MD5 is not cryptographically secure by modern standards, it is required to match the existing data.
+
+*   **Hash Format:** All hashes are stored as **Uppercase Hexadecimal Strings** (e.g., `5D41402ABC4B2A76B9719D911017C592`).
+*   **Text Encoding:** UTF-8.
+
+### 5.2. Salt Generation
+When creating a new user, a salt is generated as follows:
+```csharp
+Salt = MD5(Guid.NewGuid().ToString())
+```
+
+### 5.3. Password Hashing
+To verify a password against the stored `Hash` and `Salt`:
+
+1.  Construct the input string: `Salt + Password + Salt`.
+2.  Compute the MD5 hash of this string.
+3.  Compare the result with the stored `Hash`.
+
+**Pseudocode:**
+```
+function VerifyPassword(inputPassword, storedSalt, storedHash):
+    inputString = storedSalt + inputPassword + storedSalt
+    computedHash = MD5(inputString).toHexString().toUpperCase()
+    return computedHash == storedHash
+```
