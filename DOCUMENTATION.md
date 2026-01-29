@@ -230,3 +230,29 @@ function VerifyPassword(inputPassword, storedSalt, storedHash):
     computedHash = MD5(inputString).toHexString().toUpperCase()
     return computedHash == storedHash
 ```
+
+## 6. Configuration & Environment Setup
+
+This section describes how the existing application is configured, which serves as a baseline for the new implementation.
+
+### 6.1. Database Connection
+The application uses **MySQL** (via `Pomelo.EntityFrameworkCore.MySql`).
+The connection string is typically stored in `appsettings.json` under `ConnectionStrings:Database`.
+
+**Format:**
+```json
+{
+  "ConnectionStrings": {
+    "Database": "Server=localhost;database=bieralyzer_online;uid=USER;pwd=PASSWORD;"
+  }
+}
+```
+
+### 6.2. Application Settings
+*   **Session Management:** The legacy web app uses server-side sessions with a **72-hour** idle timeout and HTTP-only cookies.
+*   **Static Files:** Served from `wwwroot`, including bundled CSS/JS.
+
+### 6.3. Hardcoded Configuration
+Some settings in the legacy code are hardcoded and should be moved to a configuration file (like `appsettings.json`) in the new implementation.
+
+*   **Known Origins:** A list of universities/locations used for the "Origin" dropdown is currently hardcoded in `BierAlyzerWeb.Helper.SharedProperties.KnownOrigins`. This includes values like "FH Aachen", "TU Berlin", "ETH Zürich", etc. The new implementation should preferably load these from a database table or a flexible configuration source.
